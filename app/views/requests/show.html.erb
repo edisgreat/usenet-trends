@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @request.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @request.end_date %>
+</p>
+
+<p>
+  <strong>Query:</strong>
+  <%= @request.query %>
+</p>
+
+<p>
+  <strong>Cookie:</strong>
+  <%= @request.cookie %>
+</p>
+
+<p>
+  <strong>Author email:</strong>
+  <%= @request.author_email %>
+</p>
+
+<p>
+  <strong>Author name:</strong>
+  <%= @request.author_name %>
+</p>
+
+<p>
+  <strong>Source type:</strong>
+  <%= @request.source_type %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @request.status %>
+</p>
+
+<%= link_to 'Edit', edit_request_path(@request) %> |
+<%= link_to 'Back', requests_path %>

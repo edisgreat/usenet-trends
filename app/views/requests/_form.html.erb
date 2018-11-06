@@ -1,0 +1,66 @@
+<%= form_with(model: request, local: true) do |form| %>
+  <% if request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(request.errors.count, "error") %> prohibited this request from being saved:</h2>
+
+      <ul>
+      <% request.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :start_date %>
+    <%= form.date_select :start_date, start_year: 1981, end_year: 2000, discard_day: true, selected: '1981-01-01'.to_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_date %>
+    <%= form.date_select :end_date, start_year: 1980, end_year: 2000, discard_day: true, selected: '1982-01-01'.to_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :query %>
+    <%= form.text_field :query %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cookie %>
+    <%= form.text_area :cookie %>
+  </div>
+
+  <div class="field">
+    <%= form.label :authstring %>
+    <%= form.text_field :authstring %>
+  </div>
+
+  <div class="field">
+    <%= form.label :author_email %>
+    <%= form.text_field :author_email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :author_name %>
+    <%= form.text_field :author_name %>
+  </div>
+
+  <div class="defaults">
+
+    <div class="field">
+      <%= form.label :source_type %>
+      <%= form.text_field :source_type, readonly: true, value: 'google_groups_array' %>
+    </div>
+
+    <div class="field">
+      <%= form.label :status %>
+      <%= form.number_field :status, readonly: true, value: 0 %>
+    </div>
+    
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

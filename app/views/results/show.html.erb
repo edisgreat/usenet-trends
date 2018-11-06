@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @result.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @result.end_date %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @result.amount %>
+</p>
+
+<p>
+  <strong>Precision:</strong>
+  <%= @result.precision %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @result.status %>
+</p>
+
+<%= link_to 'Edit', edit_result_path(@result) %> |
+<%= link_to 'Back', results_path %>

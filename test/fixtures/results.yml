@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start_date: 2018-11-06
+  end_date: 2018-11-06
+  amount: 1
+  precision: MyString
+  status: 1
+
+two:
+  start_date: 2018-11-06
+  end_date: 2018-11-06
+  amount: 1
+  precision: MyString
+  status: 1
