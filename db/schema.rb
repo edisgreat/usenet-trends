@@ -41,5 +41,4 @@ ActiveRecord::Schema.define(version: 2018_11_06_231650) do
     t.index ["request_id"], name: "index_results_on_request_id"
   end
 
-  add_foreign_key "results", "requests"
 end
