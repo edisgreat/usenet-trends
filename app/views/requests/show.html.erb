@@ -44,4 +44,4 @@
 <%= link_to 'Back', requests_path %>
 
 
-<%= render :partial => 'requests/result-graph' %>
+<%= render partial: 'requests/result-graph', locals: {request: @request} %>

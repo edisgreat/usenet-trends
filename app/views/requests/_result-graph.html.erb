@@ -1,3 +1,5 @@
+
+
 <canvas id="chart" width="1200" height="500"></canvas>
 
 <script>
@@ -6,7 +8,7 @@
   }
 
   function newDateString(days) {
-    return moment().add(days, 'd').format('MM/DD/YYYY');
+    return moment().add(days, 'd').format('MM/YYYY');
   }
 
   var config = {
@@ -17,47 +19,37 @@
         backgroundColor: '#000000',
         borderColor: '#ff0000',
         fill: false,
-        pointRadius: 7,
+        pointRadius: 4,
         pointHoverRadius: 10,
         lineTension: 0,
-        data: [{
-          x: newDateString(0),
-          y: 1
-        }, {
-          x: newDateString(2),
-          y: 2
-        }, {
-          x: newDateString(4),
-          y: 15
-        }, {
-          x: newDateString(5),
-          y: 2
-        },{
-          x: newDateString(6),
-          y: 1
-        },{
-          x: newDateString(7),
-          y: 2
-        }, {
-          x: newDateString(8),
-          y: 15
-        }, {
-          x: newDateString(9),
-          y: 2
-        }, {
-          x: newDateString(30),
-          y: 2
-        }, {
-          x: newDateString(365),
-          y: 2
-        }],
+        data: [
+
+          <%
+            @request.relevant_results.each do |result|
+              
+              %> {
+                x: '<%= result.start_date.to_s %>',
+                y: <%= result.amount_per_day %>
+              }, <%
+
+            end 
+          %>
+
+        ],
       }]
     },
     options: {
       responsive: true,
+      hover: {
+        intersect: false,
+      },
+      tooltips: {
+        intersect: false,
+
+      },
       title: {
         display: true,
-        text: 'Richard Stallman'
+        text: '<%= @request.query %>'
       },
       scales: {
         xAxes: [{

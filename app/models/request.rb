@@ -54,4 +54,19 @@ class Request < ApplicationRecord
       loop_start_date = result_end_date
     end
   end
+
+
+  def relevant_results
+    result_length = results.length
+    last_result_amount = nil
+    return_array = []
+    results.each_with_index do |result, i|
+      next if result.amount == 0 && last_result_amount == 0 && i != 0 && i-1 != result_length
+      last_result_amount = result.amount
+      return_array << result
+    end
+    return_array
+  end
+
+
 end
