@@ -1,5 +1,5 @@
 class Request < ApplicationRecord
-  has_many :results
+  has_many :results, dependent: :destroy
   validate :check_dates
   validate :check_strings
   before_create :set_defaults
@@ -55,17 +55,23 @@ class Request < ApplicationRecord
     end
   end
 
-
-  def relevant_results
+  # Displays 0s in opportunistic places
+  def display_graph_results
     result_length = results.length
     last_result_amount = nil
     return_array = []
-    results.each_with_index do |result, i|
+    results.order(start_date: :asc).each_with_index do |result, i|
       next if result.amount == 0 && last_result_amount == 0 && i != 0 && i-1 != result_length
       last_result_amount = result.amount
       return_array << result
     end
     return_array
+  end
+
+  # Removes all 0s
+  def display_list_results
+    results.order(start_date: :asc).select{|r| r.amount > 0}
+    #results.order(start_date: :asc)
   end
 
 

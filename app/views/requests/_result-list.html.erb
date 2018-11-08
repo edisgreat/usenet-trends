@@ -1,0 +1,16 @@
+<p>Links to Google Groups Pages:</p>
+
+
+<ul>
+  <% 
+  @request.display_list_results.each do |result|
+
+    %>
+    <li><a href="<%= result.google_groups_link %>" target="_blank"><%= result.start_date %> - <%= result.amount %> - <%= result.precision %></a></li>
+
+    <%
+  end
+
+  %>
+
+</ul>

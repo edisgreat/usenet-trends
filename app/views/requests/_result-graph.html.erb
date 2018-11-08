@@ -19,13 +19,13 @@
         backgroundColor: '#000000',
         borderColor: '#ff0000',
         fill: false,
-        pointRadius: 4,
-        pointHoverRadius: 10,
+        pointRadius: 0,
+        pointHoverRadius: 1,
         lineTension: 0,
         data: [
 
           <%
-            @request.relevant_results.each do |result|
+            @request.display_graph_results.each do |result|
               
               %> {
                 x: '<%= result.start_date.to_s %>',
@@ -42,10 +42,11 @@
       responsive: true,
       hover: {
         intersect: false,
+        mode: 'x'
       },
       tooltips: {
         intersect: false,
-
+        mode: 'x'
       },
       title: {
         display: true,
