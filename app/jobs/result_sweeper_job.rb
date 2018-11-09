@@ -45,22 +45,25 @@ class ResultSweeperJob < ApplicationJob
   def check_complete_request request
     unless request.results.any?{|result| result.status != 2}
       request.update status: 2
+      ResponseCompleteMailer.success(request).deliver_now
     end
   end
 
   def count_result result
+    request = result.request
     url = 'https://groups.google.com/forum/fsearch?appversion=1&hl=en&authuser=0'
-    query = "#{result.request.query} after:#{result.start_date.to_s} before:#{result.end_date.to_s}"
-    authtoken = "APQx5HRND84GyOM6B0Q2Rh2iKaB2R6Mofg:1541691629416"
-    cookie = 'SID=pAbQ9LdAK3-qrAa-cYqeBsfFEHn4SQQAja3PW2omQN1-e0lIAd7cZXFwsb9vP17Ux8S_Lg.; HSID=AvXcvfdhGPSkIqn7j; SSID=AZomMg28PhUtN5gec;'
-    #query = 'wozniak after:1985-06-10 before:1985-06-11'
-    payload = "7|3|12|https://groups.google.com/forum/|D2FD55322ACD18E1E5E0D2074EB623A5|5m|#{authtoken}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
+    query = "#{request.query} after:#{result.start_date.to_s} before:#{result.end_date.to_s}"
+    authstring = request.authstring.blank? ? ENV['default-authstring'] : request.authstring
+    cookie = request.cookie.blank? ? ENV['default-cookie'] : request.cookie
+    payload = "7|3|12|https://groups.google.com/forum/|D2FD55322ACD18E1E5E0D2074EB623A5|5m|#{authstring}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
+
     post = Curl.post(url, payload) do |curl|
       curl.headers['Content-Type'] = 'text/x-gwt-rpc; charset=utf-8'
       curl.headers['X-GWT-Permutation'] = 'fdsds'
       curl.headers['X-GWT-Module-Base'] = 'https://groups.google.com/forum/'
       curl.headers['Cookie'] = cookie
     end
+
     output = post.body_str
     if output.first(4) == '//OK'
       output.slice!(0,4)
@@ -76,6 +79,7 @@ class ResultSweeperJob < ApplicationJob
         end
       end
     else
+      puts output
       return false
     end
   end
