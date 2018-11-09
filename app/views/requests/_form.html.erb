@@ -26,7 +26,6 @@
     <%= form.text_field :query %>
   </div>
 
-  <div class="defaults">
   <div class="field">
     <%= form.label :cookie %>
     <%= form.text_area :cookie %>
@@ -48,6 +47,7 @@
   </div>
 
 
+  <div class="defaults">
     <div class="field">
       <%= form.label :source_type %>
       <%= form.text_field :source_type, readonly: true, value: 'google_groups_array' %>

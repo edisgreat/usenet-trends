@@ -1,1 +1,5 @@
-Hello this job is complete. Glad to have you on board.
+<p>Hello <%= @name %> your Usenet Trends request is complete and a success</p>
+
+<p>To view click here <%= ENV['mailer-domain'] %>/requests/<%= @request.id %></p>
+
+<p>Thank you for using Usenet Trends. Please remember to ask Google for a proper Google Groups API!</p>

@@ -69,6 +69,6 @@ class RequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def request_params
-      params.require(:request).permit(:start_date, :end_date, :query, :cookie, :authstring, :author_email, :author_name, :source_type, :status)
+      params.require(:request).permit(:start_date, :end_date, :query, :cookie, :authstring, :author_email, :author_name)
     end
 end

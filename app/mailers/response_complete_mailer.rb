@@ -1,8 +1,14 @@
 class ResponseCompleteMailer < ApplicationMailer
-  def success
+  
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
-    mail(to: 'ed.jburnett@gmail.com', subject: 'Your Usenet Trends Request is complete and is a success')
+  def success request
 
+    @request = request
+    email = request.author_email
+    if email =~ VALID_EMAIL_REGEX
+      mail(to: email, subject: 'Your Usenet Trends Request is complete')
+    end
 
   end
 end

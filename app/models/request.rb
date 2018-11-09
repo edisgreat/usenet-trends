@@ -27,14 +27,14 @@ class Request < ApplicationRecord
     if authstring.blank?
       #errors.add(:authstring, "Cannot be empty")
     end
-    if author_name.blank?
-      author_name = "Anonymous"
-    end
   end
 
   def set_defaults
-    status = 0
-    source = 'google_groups'
+    self.status = 0
+    self.source_type = 'google_groups'
+    if author_name.blank?
+      self.author_name = "Anonymous"
+    end
   end
 
   def create_results

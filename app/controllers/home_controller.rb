@@ -4,8 +4,8 @@ class HomeController < ApplicationController
   end
 
   def envs
-    render html: ENV['sendgrid_api_key']
-
-    ResponseCompleteMailer.success.deliver_now
+    r=Request.last
+    ResponseCompleteMailer.success(r).deliver_now
+    render html: "Temp Email Sent"
   end
 end
