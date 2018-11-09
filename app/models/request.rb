@@ -22,16 +22,13 @@ class Request < ApplicationRecord
       errors.add(:query, "Cannot be empty")
     end
     if cookie.blank?
-      errors.add(:cookie, "Cannot be empty")
+      #errors.add(:cookie, "Cannot be empty")
     end
     if authstring.blank?
-      errors.add(:authstring, "Cannot be empty")
-    end
-    if author_email.blank?
-      errors.add(:author_email, "Cannot be empty")
+      #errors.add(:authstring, "Cannot be empty")
     end
     if author_name.blank?
-      errors.add(:author_name, "Cannot be empty")
+      author_name = "Anonymous"
     end
   end
 
@@ -71,7 +68,7 @@ class Request < ApplicationRecord
   # Removes all 0s
   def display_list_results
     results.order(start_date: :asc).select{|r| r.amount > 0}
-    #results.order(start_date: :asc)
+    results.order(start_date: :asc)
   end
 
 
