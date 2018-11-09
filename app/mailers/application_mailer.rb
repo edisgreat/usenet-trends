@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'from@example.com'
+  default from: 'usenet-rails@usenet-rails.com'
   layout 'mailer'
 end

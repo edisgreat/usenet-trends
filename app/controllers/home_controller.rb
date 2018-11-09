@@ -5,5 +5,7 @@ class HomeController < ApplicationController
 
   def envs
     render html: ENV['sendgrid_api_key']
+
+    ResponseCompleteMailer.success.deliver_now
   end
 end
