@@ -5,6 +5,7 @@ class Result < ApplicationRecord
   # status 0 = untouched
   # status 1 = processing
   # status 2 = done
+  # status 3 = archive
 
   def amount_per_day
     if precision == 'month'

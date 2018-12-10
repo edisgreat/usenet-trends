@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def home
-    
+    ResultSweeperJob.perform_now
   end
 
   def envs

@@ -55,6 +55,13 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  logger           = ActiveSupport::Logger.new(STDOUT)
+  #logger           = Logdna::RailsLogger.new(ENV['logdna_api_key'], {level: 'DEBUG'})
+  logger.formatter = config.log_formatter
+  logger.level = Logger::DEBUG
+  config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  config.log_level = :debug
+
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker

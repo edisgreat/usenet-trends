@@ -5,6 +5,19 @@ class Request < ApplicationRecord
   before_create :set_defaults
   after_create :create_results
 
+  def status_s
+    case status
+    when -1
+      "Error"
+    when 0
+      "Waiting"
+    when 1
+      "In Progress"
+    when 2
+      "Complete"
+    end
+  end
+
   def check_dates
     if(start_date < '1981-01-01'.to_date)
       errors.add(:start_date, "Cannot be before 1981")

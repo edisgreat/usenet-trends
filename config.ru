@@ -2,4 +2,7 @@
 
 require_relative 'config/environment'
 
+# recommended from heroku
+$stdout.sync = true
+
 run Rails.application
