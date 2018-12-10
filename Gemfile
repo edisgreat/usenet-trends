@@ -40,6 +40,7 @@ gem 'curb'
 gem 'sendgrid-ruby'
 gem 'figaro'
 gem 'sendgrid-actionmailer'
+gem 'timber', '~> 2.6'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
