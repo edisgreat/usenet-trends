@@ -66,9 +66,9 @@ Rails.application.configure do
   http_device = Timber::LogDevices::HTTP.new(ENV['timberio_api_key'])
   file_device = File.open("#{Rails.root}/log/development.log", "a")
   file_device.binmode
-  log_devices = [file_device]
+  log_devices = [file_device, http_device]
+  log_devices << STDOUT if File.basename($0) == 'rake'
   config.log_level = :debug
-
 
   # Do not modify below this line. It's important to keep the `Timber::Logger`
   # because it provides an API for logging structured data and capturing context.

@@ -5,27 +5,19 @@ class ResultSweeperJob < ApplicationJob
   queue_as :default
 
   def perform
-
-    
-    puts "Puts"
-    logger.debug "logger debug"
-    logger.info "logger info"
-    logger.warn "logger warn"
-    logger.error "logger error"
-    logger.fatal "logger fatal"
-
-    return
-    
     results = Result.where(status: 0).limit(1)
+    logger.info "found #{results.length} results"
     result_array = results.to_a # Cause Rails is weird
     results.update_all status: 1 # mark all as owned
-    logger.debug "!!!!!!!!!!!!!!!"
-    puts "!!!!!!!!!!!"
     result_array.each do |result|
       result.request.update status: 1
-      amount = count_result result
+
+      body_str = get_googlegroups_body result
+      
+      amount = calc_googlegroups_body body_str
+
       if !amount
-        logger.info "!amount"
+        logger.error "bad value set"
         result.update status: -1
       elsif amount >= 19 && result.precision == 'month'
         # Destroy Result, create Daily
@@ -38,7 +30,6 @@ class ResultSweeperJob < ApplicationJob
         sleep 0.5
       end
     end
-    #perform
   end
 
   def create_daily_requests result
@@ -64,8 +55,8 @@ class ResultSweeperJob < ApplicationJob
     end
   end
 
-  # Returns estimate count on OK, false on error
-  def count_result result
+  # Use curb gem to grab weird Googlegroups API endpoint
+  def get_googlegroups_body result
     request = result.request
     url = 'https://groups.google.com/forum/fsearch?appversion=1&hl=en&authuser=0'
     query = "#{request.query} after:#{result.start_date.to_s} before:#{result.end_date.to_s}"
@@ -73,22 +64,32 @@ class ResultSweeperJob < ApplicationJob
     cookie = request.cookie.blank? ? ENV['default-cookie'] : request.cookie
     payload = "7|3|12|https://groups.google.com/forum/|D2FD55322ACD18E1E5E0D2074EB623A5|5m|#{authstring}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
 
-    # Using Curb
-    post = Curl.post(url, payload) do |curl|
+    post = call_googlegroups url, payload, cookie
+
+    post.body_str    
+  end
+
+  def call_googlegroups url, payload, cookie
+    Curl.post(url, payload) do |curl|
       curl.headers['Content-Type'] = 'text/x-gwt-rpc; charset=utf-8'
       curl.headers['X-GWT-Permutation'] = 'fdsds'
       curl.headers['X-GWT-Module-Base'] = 'https://groups.google.com/forum/'
       curl.headers['Cookie'] = cookie
     end
+  end
 
-    output = post.body_str
-    if output.first(4) == '//OK'
-      output.slice!(0,4)
-      output = output.tr("'", '"')
-      # TODO Add error handling here
-      output_array = JSON.parse(output)
+
+  # Check output. 
+  # If its OK Then parse and return amount
+  #  Else theres an error with the cookie probably, so return false
+  def calc_googlegroups_body body_str
+    if body_str.first(4) == '//OK'
+      body_str.slice!(0,4)
+      body_str = body_str.tr("'", '"')
       # Because the google groups output has a second array in here
-      output_array.each do |value|
+      # TODO Add error handling here
+      body_str_array = JSON.parse(body_str)
+      body_str_array.each do |value|
         if value.class==Array
           array_length = value.length
           amount = amount_from_google_groups_length array_length
@@ -96,11 +97,10 @@ class ResultSweeperJob < ApplicationJob
         end
       end
     else
-      puts output
       return false
     end
-  end
 
+  end
 
   def amount_from_google_groups_length array_length
     if array_length <= 4
