@@ -67,7 +67,7 @@ Rails.application.configure do
   file_device = File.open("#{Rails.root}/log/development.log", "a")
   file_device.binmode
   log_devices = [file_device]
-  config.log_level = :info
+  config.log_level = :debug
 
 
   # Do not modify below this line. It's important to keep the `Timber::Logger`
