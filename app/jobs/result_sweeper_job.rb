@@ -17,7 +17,7 @@ class ResultSweeperJob < ApplicationJob
       amount = calc_googlegroups_body body_str
 
       if !amount
-        logger.error "bad value set"
+        logger.error "bad value received"
         result.update status: -1
       elsif amount >= 19 && result.precision == 'month'
         # Destroy Result, create Daily
@@ -86,9 +86,16 @@ class ResultSweeperJob < ApplicationJob
     if body_str.first(4) == '//OK'
       body_str.slice!(0,4)
       body_str = body_str.tr("'", '"')
-      # Because the google groups output has a second array in here
-      # TODO Add error handling here
-      body_str_array = JSON.parse(body_str)
+      
+      # handle the parse error with a false
+      begin
+        body_str_array = JSON.parse(body_str)
+      rescue JSON::ParserError
+        return false
+      end
+
+      # googlegroups returns a second array in the return value
+      # grab it and get amount from it
       body_str_array.each do |value|
         if value.class==Array
           array_length = value.length
@@ -96,10 +103,8 @@ class ResultSweeperJob < ApplicationJob
           return amount
         end
       end
-    else
-      return false
     end
-
+    return false
   end
 
   def amount_from_google_groups_length array_length
