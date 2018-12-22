@@ -1,13 +1,21 @@
 require "rails_helper"
 
-RSpec.describe Request, :type => :model do
-  
-  before(:all) do
-    @request = create(:request)
+describe Request, type: :model do
+
+  context "valid Factory" do
+    it "has a valid factory" do
+      expect(build(:request)).to be_valid
+    end
   end
 
-  it "is valid with valid attributes" do
-    expect(@request).to be_valid
+  context "associations" do
+    it { should have_many :results }
+  end
+
+  context "post save" do
+    it "creates results" do
+      expect(create(:request).results.count).to be_positive
+    end
   end
   
 end

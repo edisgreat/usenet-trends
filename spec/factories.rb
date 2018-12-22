@@ -11,4 +11,13 @@ FactoryBot.define do
     status {0}
   end
 
+  factory :result do
+    start_date {"1985-01-01"}
+    end_date {"1986-01-01"}
+    amount {5}
+    precision {"month"}
+    request
+    status {0}
+  end
+
 end

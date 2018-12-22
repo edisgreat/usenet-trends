@@ -60,3 +60,12 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+
+# Shoulda Matchers
+# From https://www.rubydoc.info/github/thoughtbot/shoulda-matchers/master/frames
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
