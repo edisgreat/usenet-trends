@@ -16,11 +16,25 @@
 class Result < ApplicationRecord
   belongs_to :request
 
-  # status -1 = error
-  # status 0 = untouched
-  # status 1 = processing
-  # status 2 = done
-  # status 3 = archive
+  def status_map
+    {
+      -1 => :error,
+      0 => :waiting,
+      1 => :in_progress,
+      2 => :complete,
+      3 => :archived,
+    }
+  end
+
+  scope :error, -> { where(status: -1) }
+  scope :waiting, -> { where(status: 0) }
+  scope :complete, -> { where(status: 2) }
+  scope :month, -> { where(precision: 'month') }
+  scope :day, -> { where(precision: 'day') }
+
+  def status_s
+    status_map[status]
+  end
 
   def amount_per_day
     if precision == 'month'

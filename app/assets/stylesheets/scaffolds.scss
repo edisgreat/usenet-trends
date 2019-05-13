@@ -79,13 +79,13 @@ div {
   }
 }
 
-label {
-  display: block;
-}
-
 .field{
   label{
     display:block;
+    font-weight: bold;
+  }
+  .help{
+    font-size: .8em;
   }
   input{
     width:500px;

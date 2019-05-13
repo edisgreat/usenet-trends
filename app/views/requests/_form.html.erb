@@ -23,26 +23,41 @@
 
   <div class="field">
     <%= form.label :query %>
+    <div class="help">
+      Your search request goes here. Use quotes if looking for an exact match
+    </div>
     <%= form.text_field :query %>
   </div>
 
   <div class="field">
     <%= form.label :cookie %>
+    <div class="help">
+      In the Request headers, starting with the string looking like NID=183=bSp....
+    </div>
     <%= form.text_field :cookie %>
   </div>
 
   <div class="field">
     <%= form.label :authstring %>
+    <div class="help">
+      In the Request body, between the strings |5m| and |_|, of the format APQx...
+    </div>
     <%= form.text_field :authstring %>
   </div>
 
   <div class="field">
     <%= form.label :author_email %>
+    <div class="help">
+      Fill this out if you would like to be emailed when your search is complete
+    </div>
     <%= form.text_field :author_email %>
   </div>
 
   <div class="field">
     <%= form.label :author_name %>
+    <div class="help">
+      Fill this out if you would like to have a name associated with your search
+    </div>
     <%= form.text_field :author_name %>
   </div>
 

@@ -23,17 +23,21 @@ class Request < ApplicationRecord
   before_create :set_defaults
   after_create :create_results
 
+  scope :error, -> { where(status: -1) }
+  scope :waiting, -> { where(status: 0) }
+  scope :complete, -> { where(status: 2) }
+
+  def status_map
+    {
+      -1 => :error,
+      0 => :waiting,
+      1 => :in_progress,
+      2 => :complete,
+    }
+  end
+
   def status_s
-    case status
-    when -1
-      "Error"
-    when 0
-      "Waiting"
-    when 1
-      "In Progress"
-    when 2
-      "Complete"
-    end
+    status_map[status]
   end
 
   def check_dates
