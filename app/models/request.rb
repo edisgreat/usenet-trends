@@ -94,18 +94,11 @@ class Request < ApplicationRecord
   # Used by _result-graph.html.erb
   # Outputs array of results
   def display_graph_results
-    result_length = results.length
-    last_result_amount = nil
-    return_array = []
-    results.order(start_date: :asc).each_with_index do |result, i|
-      last_result_amount = result.amount
-      return_array << result
-    end
-    return_array
+    results.complete.order(start_date: :asc).to_a
   end
 
   def display_list_results
-    results.order(start_date: :asc)
+    results.complete.order(start_date: :asc)
   end
 
 
