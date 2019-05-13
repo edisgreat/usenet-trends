@@ -13,12 +13,12 @@
 
   <div class="field">
     <%= form.label :start_date %>
-    <%= form.date_select :start_date, start_year: 1981, end_year: 2000, discard_day: true, selected: '1981-01-01'.to_date %>
+    <%= form.date_select :start_date, start_year: 1981, end_year: 2002, discard_day: true, selected: '1981-01-01'.to_date %>
   </div>
 
   <div class="field">
     <%= form.label :end_date %>
-    <%= form.date_select :end_date, start_year: 1980, end_year: 2000, discard_day: true, selected: '1982-01-01'.to_date %>
+    <%= form.date_select :end_date, start_year: 1980, end_year: 2002, discard_day: true, selected: '1982-01-01'.to_date %>
   </div>
 
   <div class="field">
@@ -44,20 +44,6 @@
   <div class="field">
     <%= form.label :author_name %>
     <%= form.text_field :author_name %>
-  </div>
-
-
-  <div class="defaults">
-    <div class="field">
-      <%= form.label :source_type %>
-      <%= form.text_field :source_type, readonly: true, value: 'google_groups_array' %>
-    </div>
-
-    <div class="field">
-      <%= form.label :status %>
-      <%= form.number_field :status, readonly: true, value: 0 %>
-    </div>
-    
   </div>
 
   <div class="actions">

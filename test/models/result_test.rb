@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: results
+#
+#  id         :bigint(8)        not null, primary key
+#  start_date :date
+#  end_date   :date
+#  amount     :integer
+#  precision  :string
+#  status     :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  request_id :bigint(8)
+#
+
 require 'test_helper'
 
 class ResultTest < ActiveSupport::TestCase

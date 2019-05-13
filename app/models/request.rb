@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: requests
+#
+#  id           :bigint(8)        not null, primary key
+#  start_date   :date
+#  end_date     :date
+#  query        :string
+#  cookie       :string
+#  author_email :string
+#  author_name  :string
+#  source_type  :string
+#  status       :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  authstring   :string
+#
+
 class Request < ApplicationRecord
   has_many :results, dependent: :destroy
   validate :check_dates
@@ -22,8 +40,8 @@ class Request < ApplicationRecord
     if(start_date < '1981-01-01'.to_date)
       errors.add(:start_date, "Cannot be before 1981")
     end
-    if(end_date > '2000-01-01'.to_date)
-      errors.add(:end_date, "Cannot be after 2000")
+    if(end_date > '2002-01-01'.to_date)
+      errors.add(:end_date, "Cannot be after 2002")
     end
     if(end_date <= start_date)
       errors.add(:end_date, "Must be after Start Date")
@@ -50,9 +68,13 @@ class Request < ApplicationRecord
     end
   end
 
+  #
+  # Callback after create
+  # Loop through, make monthly Result with status: waiting
+  # result_sweeper_job.rb will pick up waiting Results and populate with data
+  #
   def create_results
-    # Make monthly results
-    loop_start_date = start_date.at_beginning_of_month #ensure no cheats
+    loop_start_date = start_date.at_beginning_of_month
     loop_end_date = end_date.at_beginning_of_month
 
     while loop_start_date < loop_end_date
@@ -65,22 +87,20 @@ class Request < ApplicationRecord
     end
   end
 
-  # Displays 0s in opportunistic places
+  # Used by _result-graph.html.erb
+  # Outputs array of results
   def display_graph_results
     result_length = results.length
     last_result_amount = nil
     return_array = []
     results.order(start_date: :asc).each_with_index do |result, i|
-      next if result.amount == 0 && last_result_amount == 0 && i != 0 && i-1 != result_length
       last_result_amount = result.amount
       return_array << result
     end
     return_array
   end
 
-  # Removes all 0s
   def display_list_results
-    results.order(start_date: :asc).select{|r| r.amount > 0}
     results.order(start_date: :asc)
   end
 

@@ -1,5 +1,5 @@
 body {
-  background-color: #fff;
+  background-color: #ddd;
   color: #333;
   margin: 33px;
   font-family: verdana, arial, helvetica, sans-serif;
@@ -81,4 +81,13 @@ div {
 
 label {
   display: block;
+}
+
+.field{
+  label{
+    display:block;
+  }
+  input{
+    width:500px;
+  }
 }

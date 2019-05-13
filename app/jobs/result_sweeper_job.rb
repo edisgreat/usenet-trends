@@ -58,10 +58,10 @@ class ResultSweeperJob < ApplicationJob
   # Use curb gem to grab weird Googlegroups API endpoint
   def get_googlegroups_body result
     request = result.request
-    url = 'https://groups.google.com/forum/fsearch?appversion=1&hl=en&authuser=0'
+    url = 'https://groups.google.com/forum/fsearch?appversion=1'
     query = "#{request.query} after:#{result.start_date.to_s} before:#{result.end_date.to_s}"
-    authstring = request.authstring.blank? ? ENV['default-authstring'] : request.authstring
-    cookie = request.cookie.blank? ? ENV['default-cookie'] : request.cookie
+    authstring = request.authstring
+    cookie = request.cookie
     payload = "7|3|12|https://groups.google.com/forum/|D2FD55322ACD18E1E5E0D2074EB623A5|5m|#{authstring}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
 
     post = call_googlegroups url, payload, cookie
