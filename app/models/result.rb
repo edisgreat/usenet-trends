@@ -2,15 +2,18 @@
 #
 # Table name: results
 #
-#  id         :bigint(8)        not null, primary key
-#  start_date :date
-#  end_date   :date
-#  amount     :integer
-#  precision  :string
-#  status     :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  request_id :bigint(8)
+#  id              :bigint(8)        not null, primary key
+#  start_date      :date
+#  end_date        :date
+#  amount          :integer
+#  precision       :string
+#  status          :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  request_id      :bigint(8)
+#  debug_payload   :text
+#  debug_result    :text
+#  result_month_id :integer
 #
 
 class Result < ApplicationRecord
@@ -31,6 +34,8 @@ class Result < ApplicationRecord
   scope :complete, -> { where(status: 2) }
   scope :month, -> { where(precision: 'month') }
   scope :day, -> { where(precision: 'day') }
+  scope :for_list, -> { where(precision: 'month').where(status: [0,1,2,3]).order('start_date asc, status desc') }
+  scope :on_result_month, -> (result) { where(precision: 'day').where(status: [0,1,2,3]).where(result_month_id: result.id).order('start_date asc, status desc') }
 
   def status_s
     status_map[status]

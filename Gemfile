@@ -44,6 +44,9 @@ gem 'sendgrid-actionmailer'
 gem 'timber', '~> 2.6'
 gem 'devise', '~> 4.4.3'
 gem 'activeadmin', '~> 1.4.3'
+gem 'cancancan'
+gem 'draper'
+gem 'pundit'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

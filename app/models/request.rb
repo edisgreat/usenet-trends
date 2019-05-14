@@ -72,6 +72,11 @@ class Request < ApplicationRecord
     end
   end
 
+  def reset_results
+    results.destroy_all
+    create_results
+  end
+
   #
   # Callback after create
   # Loop through, make monthly Result with status: waiting
@@ -96,10 +101,5 @@ class Request < ApplicationRecord
   def display_graph_results
     results.complete.order(start_date: :asc).to_a
   end
-
-  def display_list_results
-    results.complete.order(start_date: :asc)
-  end
-
 
 end

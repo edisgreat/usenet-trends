@@ -91,3 +91,10 @@ div {
     width:500px;
   }
 }
+
+.result_list{
+  list-style: none;
+  position:relative;
+  .closed{display:none;}
+  .expander{position:absolute; left:-10px;}
+}

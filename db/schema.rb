@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2019_05_14_180444) do
     t.bigint "request_id"
     t.text "debug_payload"
     t.text "debug_result"
+    t.integer "result_month_id"
     t.index ["request_id"], name: "index_results_on_request_id"
   end
 

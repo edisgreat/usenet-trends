@@ -5,7 +5,7 @@ class ResultSweeperJob < ApplicationJob
   queue_as :default
 
   def perform
-    results = Result.waiting.limit(200)
+    results = Result.waiting.limit(20)
     logger.info "ResultSweeperJob-perform: found #{results.length} results"
     result_array = results.to_a # Cause Rails is weird
 
@@ -26,6 +26,10 @@ class ResultSweeperJob < ApplicationJob
         logger.debug "creating daily from #{result.request.query}, #{result.start_date} - #{result.end_date}"
         create_daily_requests result
       else
+        if result.precision == 'day'
+          result_month = Result.find(result.result_month_id)
+          result_month.update amount: (amount+result_month.amount)
+        end
         result.update amount: amount, status: 2
         logger.info "found #{amount} from #{result.request.query}, #{result.start_date} - #{result.end_date}"
         check_complete_request result.request
@@ -43,7 +47,7 @@ class ResultSweeperJob < ApplicationJob
     while loop_start_date < loop_end_date
       result_start_date = loop_start_date
       result_end_date = loop_start_date.next_day
-      request.results.create(start_date: result_start_date, end_date: result_end_date, amount: 0, precision: 'day', status: 0)
+      request.results.create(start_date: result_start_date, end_date: result_end_date, amount: 0, precision: 'day', status: 0, result_month_id: result.id)
       loop_start_date = result_end_date
     end
     result.update status: 3

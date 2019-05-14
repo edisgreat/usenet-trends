@@ -1,13 +1,47 @@
 <p>Links to Google Groups Pages:</p>
 
 
-<ul>
+<ul class="result_list">
   <% 
-  @request.display_list_results.each do |result|
+  @request.results.for_list.each_with_index do |result, i|
+
+    if result.status_s == :complete || :archived
+      result_output = result.amount
+    else
+      result_output = 'Processing'
+    end
 
     %>
-    <li><a href="<%= result.google_groups_link %>" target="_blank"><%= result.start_date %> - <%= result.amount %> - <%= result.precision %></a></li>
-
+    <li class="result">
+    <%
+    if result.status_s == :archived
+      %>
+      <a class="expander" expanded="false" href="javascript:;">(&plus;)</a>
+      <%
+    end
+    %>
+    <a href="<%= result.google_groups_link %>" target="_blank"><%= result.start_date %> - <%= result_output %></a>
+    <%
+    if result.status_s == :archived
+      %>
+      <ul class="closed">
+      <%
+      Result.on_result_month(result).each_with_index do |day_result|
+        if day_result.status_s == :complete || :archived
+          day_result_output = day_result.amount
+        else
+          day_result_output = 'Processing'
+        end
+        %>
+        <li><a href="<%= day_result.google_groups_link %>" target="_blank"><%= day_result.start_date %> - <%= day_result_output %></a></li>
+        <%
+      end
+      %>
+      </ul>
+      <%
+    end
+    %>
+    </li>
     <%
   end
 
