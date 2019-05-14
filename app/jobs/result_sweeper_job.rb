@@ -5,8 +5,8 @@ class ResultSweeperJob < ApplicationJob
   queue_as :default
 
   def perform
-    results = Result.waiting.limit(50)
-    logger.info "found #{results.length} results"
+    results = Result.waiting.limit(200)
+    logger.info "ResultSweeperJob-perform: found #{results.length} results"
     result_array = results.to_a # Cause Rails is weird
     results.update_all status: 1 # mark all as owned
     result_array.each do |result|
@@ -17,11 +17,11 @@ class ResultSweeperJob < ApplicationJob
       amount = calc_googlegroups_body body_str
 
       if !amount
-        logger.error "bad value received"
+        logger.debug "ResultSweeperJob-error: bad value received: #{body_str}"
         result.update status: -1
       elsif amount >= 19 && result.precision == 'month'
         # Destroy Result, create Daily
-        logger.info "creating daily"
+        logger.debug "creating daily from #{result.request.query}, #{result.start_date} - #{result.end_date}"
         create_daily_requests result
       else
         result.update amount: amount, status: 2
@@ -62,7 +62,7 @@ class ResultSweeperJob < ApplicationJob
     query = "#{request.query} after:#{result.start_date.to_s} before:#{result.end_date.to_s}"
     authstring = request.authstring
     cookie = request.cookie
-    payload = "7|3|12|https://groups.google.com/forum/|C94EA398D5CA30EC45194FFE7A7DC1CF|5m|#{authstring}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
+    payload = "7|3|12|https://groups.google.com/forum/|#{authstring}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
     post = call_googlegroups url, payload, cookie
 
     post.body_str
