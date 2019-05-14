@@ -36,6 +36,7 @@ class Result < ApplicationRecord
   scope :day, -> { where(precision: 'day') }
   scope :for_list, -> { where(precision: 'month').where(status: [0,1,2,3]).order('start_date asc, status desc') }
   scope :on_result_month, -> (result) { where(precision: 'day').where(status: [0,1,2,3]).where(result_month_id: result.id).order('start_date asc, status desc') }
+  scope :for_sweep, -> { where(status: 0).order('start_date asc, status desc')}
 
   def status_s
     status_map[status]

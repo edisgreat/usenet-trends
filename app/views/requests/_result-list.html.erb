@@ -5,7 +5,7 @@
   <% 
   @request.results.for_list.each_with_index do |result, i|
 
-    if result.status_s == :complete || :archived
+    if result.status_s == :complete || result.status_s == :archived
       result_output = result.amount
     else
       result_output = 'Processing'

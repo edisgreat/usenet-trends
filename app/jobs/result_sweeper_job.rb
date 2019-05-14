@@ -5,7 +5,7 @@ class ResultSweeperJob < ApplicationJob
   queue_as :default
 
   def perform
-    results = Result.waiting.limit(20)
+    results = Result.for_sweep.limit(20)
     logger.info "ResultSweeperJob-perform: found #{results.length} results"
     result_array = results.to_a # Cause Rails is weird
 
@@ -66,8 +66,21 @@ class ResultSweeperJob < ApplicationJob
     x_request = x_result.request
     url = 'https://groups.google.com/forum/fsearch?appversion=1&hl=en&authuser=0'
     query = "#{x_request.query} after:#{x_result.start_date.to_s} before:#{x_result.end_date.to_s}"
-    authstring = x_request.authstring
     cookie = x_request.cookie
+    authstring = x_request.authstring
+
+    if authstring.blank?
+      if as = AdminString.best.first
+        authstring = as.authstring 
+      end
+    end
+
+    if cookie.blank?
+      if as = AdminString.best.first
+        cookie = as.cookie 
+      end
+    end
+
     payload = "7|3|12|https://groups.google.com/forum/|#{authstring}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
     x_result.update debug_payload: payload
     post = call_googlegroups url, payload, cookie
