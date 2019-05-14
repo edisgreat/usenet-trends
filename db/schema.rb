@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_13_215312) do
+ActiveRecord::Schema.define(version: 2019_05_14_180444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,8 @@ ActiveRecord::Schema.define(version: 2019_05_13_215312) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "request_id"
+    t.text "debug_payload"
+    t.text "debug_result"
     t.index ["request_id"], name: "index_results_on_request_id"
   end
 

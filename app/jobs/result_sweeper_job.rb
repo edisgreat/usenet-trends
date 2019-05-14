@@ -8,19 +8,21 @@ class ResultSweeperJob < ApplicationJob
     results = Result.waiting.limit(200)
     logger.info "ResultSweeperJob-perform: found #{results.length} results"
     result_array = results.to_a # Cause Rails is weird
-    results.update_all status: 1 # mark all as owned
+
+    # Mark all as owned and do work on each
+    results.update_all status: 1 
     result_array.each do |result|
       result.request.update status: 1
 
+      # utilize response from google
       body_str = get_googlegroups_body result
-      
+      result.update debug_result: body_str
       amount = calc_googlegroups_body body_str
 
       if !amount
         logger.debug "ResultSweeperJob-error: bad value received: #{body_str}"
         result.update status: -1
       elsif amount >= 19 && result.precision == 'month'
-        # Destroy Result, create Daily
         logger.debug "creating daily from #{result.request.query}, #{result.start_date} - #{result.end_date}"
         create_daily_requests result
       else
@@ -56,13 +58,14 @@ class ResultSweeperJob < ApplicationJob
   end
 
   # Use curb gem to grab weird Googlegroups API endpoint
-  def get_googlegroups_body result
-    request = result.request
+  def get_googlegroups_body x_result
+    x_request = x_result.request
     url = 'https://groups.google.com/forum/fsearch?appversion=1&hl=en&authuser=0'
-    query = "#{request.query} after:#{result.start_date.to_s} before:#{result.end_date.to_s}"
-    authstring = request.authstring
-    cookie = request.cookie
+    query = "#{x_request.query} after:#{x_result.start_date.to_s} before:#{x_result.end_date.to_s}"
+    authstring = x_request.authstring
+    cookie = x_request.cookie
     payload = "7|3|12|https://groups.google.com/forum/|#{authstring}|_|getMatchingMessages|5t|i|I|1u|5n|#{query}|1|2|3|4|5|6|6|7|8|9|9|10|11|12|0|0|20|0|0|"
+    x_result.update debug_payload: payload
     post = call_googlegroups url, payload, cookie
 
     post.body_str
