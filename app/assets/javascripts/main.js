@@ -13,5 +13,7 @@ $(document).ready(function(){
     }
   })
 
+  $('.advanced-clicker').click(function(){$('.advanced-holder').show()})
+
 
 })

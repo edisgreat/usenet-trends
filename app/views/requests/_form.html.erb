@@ -13,12 +13,12 @@
 
   <div class="field">
     <%= form.label :start_date %>
-    <%= form.date_select :start_date, start_year: 1981, end_year: 2002, discard_day: true, selected: '1981-01-01'.to_date %>
+    <%= form.date_select :start_date, start_year: 1980, end_year: 2002, discard_day: true, selected: '1985-01-01'.to_date %>
   </div>
 
   <div class="field">
     <%= form.label :end_date %>
-    <%= form.date_select :end_date, start_year: 1980, end_year: 2002, discard_day: true, selected: '1982-01-01'.to_date %>
+    <%= form.date_select :end_date, start_year: 1980, end_year: 2002, discard_day: true, selected: '1986-01-01'.to_date %>
   </div>
 
   <div class="field">
@@ -27,22 +27,6 @@
       Your search request goes here. Use quotes if looking for an exact match
     </div>
     <%= form.text_field :query %>
-  </div>
-
-  <div class="field">
-    <%= form.label :cookie %>
-    <div class="help">
-      In the Request headers, starting with the string looking like NID=183=bSp....
-    </div>
-    <%= form.text_field :cookie %>
-  </div>
-
-  <div class="field">
-    <%= form.label :authstring %>
-    <div class="help">
-      In the Request body, between the strings groups.google.com/forum/| and |_|, of the format C94E....|5m|APQx...
-    </div>
-    <%= form.text_field :authstring %>
   </div>
 
   <div class="field">
@@ -59,6 +43,27 @@
       Fill this out if you would like to have a name associated with your search
     </div>
     <%= form.text_field :author_name %>
+  </div>
+
+  <a href="javascript:;" class="advanced-clicker">Advanced Usage</a>
+  <span class="advanced-subtext">- use this only if you don't mind sharing your Google-based cookies and variables</span>
+
+  <div class="advanced-holder">
+    <div class="field">
+      <%= form.label :cookie %>
+      <div class="help">
+        In the Request headers, starting with the string looking like NID=183=bSp....
+      </div>
+      <%= form.text_field :cookie %>
+    </div>
+
+    <div class="field">
+      <%= form.label :authstring %>
+      <div class="help">
+        In the Request body, between the strings groups.google.com/forum/| and |_|, of the format C94E....|5m|APQx...
+      </div>
+      <%= form.text_field :authstring %>
+    </div>
   </div>
 
   <div class="actions">
