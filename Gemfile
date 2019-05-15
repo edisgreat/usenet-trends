@@ -42,11 +42,16 @@ gem 'sendgrid-ruby'
 gem 'figaro'
 gem 'sendgrid-actionmailer'
 gem 'timber', '~> 2.6'
-gem 'devise', '~> 4.4.3'
+gem "devise", ">= 4.6.0"
 gem 'activeadmin', '~> 1.4.3'
 gem 'cancancan'
 gem 'draper'
 gem 'pundit'
+gem "actionview", ">= 5.2.2.1"
+gem "railties", ">= 5.2.2.1"
+
+
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
