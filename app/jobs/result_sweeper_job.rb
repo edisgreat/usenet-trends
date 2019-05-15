@@ -113,11 +113,14 @@ class ResultSweeperJob < ApplicationJob
     if body_str.first(4) == '//OK'
       body_str.slice!(0,4)
       body_str = body_str.tr("'", '"')
+      body_str = body_str.tr("\n", ' ')
+      body_str = body_str.html_safe
       
       # handle the parse error with a false
       begin
-        body_str_array = JSON.parse(body_str)
+        body_str_array = JSON.parse("#{body_str}", quirks_mode: true) # Output as string first to avoid bad potential parsing
       rescue JSON::ParserError
+        logger.debug "ResultSweeperJob-error: bad parsing: #{body_str}"
         return false
       end
 
@@ -135,10 +138,11 @@ class ResultSweeperJob < ApplicationJob
   end
 
   def amount_from_google_groups_length array_length
+    array_length = array_length.to_f
     if array_length <= 4
       0
     else
-      ((array_length - 23) / 7).to_i
+      ((array_length - 23) / 7).ceil.to_i
     end
   end
 
