@@ -1,24 +1,7 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Usenet Trends is a way to facilitate searches against the Usenet archives.
 
-Things you may want to cover:
+Unfortuonately since the only place on the internet the Usenet data is pubilcally accessible is Google Groups, this means we need to query against Google Groups.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+TODO Finish writing
