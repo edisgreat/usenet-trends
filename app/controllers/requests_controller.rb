@@ -12,6 +12,12 @@ class RequestsController < ApplicationController
   def show
   end
 
+  def archives
+    respond_to do |format|
+      format.html { render :archives }
+    end
+  end
+
   # GET /requests/new
   def new
     @request = Request.new

@@ -1,27 +1,19 @@
 <% content_for :title, @request.query %>
 
 
-<p id="notice"><%= notice %></p>
+<h1><%= @request.query %></h1>
+
 
 <p>
-  <strong>Start date:</strong>
-  <%= @request.start_date %>
+  From <%= @request.start_date %> to <%= @request.end_date %>
 </p>
 
-<p>
-  <strong>End date:</strong>
-  <%= @request.end_date %>
-</p>
-
-<p>
-  <strong>Author name:</strong>
-  <%= @request.author_name %>
-</p>
-
+<!-- 
 <p>
   <strong>Status:</strong>
   <%= @request.status_s %>
 </p>
+-->
 
 <%= link_to 'Edit', edit_request_path(@request) %> |
 <%= link_to 'Back', requests_path %>
